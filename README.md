@@ -24,10 +24,49 @@ To start using jenkins, a user must complete the following steps:
   - run "docker-compose up -d" to start jenkins
   - after the docker-compose finishes, you should be able to open a web browser to your server FQDN, and port 8080
   - example: http://www.example.com:8080
+## Jenkins Initial Configuration
+- once jenkins is online, and accessible from the 8080 port, you will need to provide the initial admin password, and then set a new admin password by running the following commands:
+- run the following from the server, in the root shell directory:
+```
+docker compose logs jenkins | less
+```
+- This will output your admin password to provide on the web browser as your initial admin password
+```
+*************************************************************
+*************************************************************
+*************************************************************
+ 
+Jenkins initial setup is required. An admin user has been created and a password generated.
+Please use the following password to proceed to installation:
+ 
+c061b679107a4893b5383617729b5c6a
+ 
+This may also be found at: /var/jenkins_home/secrets/initialAdminPassword
+ 
+*************************************************************
+*************************************************************
+*************************************************************
+```
+
+## production plugins installed, and how to install plugins
+The Production jenkins has a certain number of plugins installed. You can do this manually, or via searching the jenkins plugins list. If you wish to see what plugins your instance has, follow these steps:
+- Open the jenkins browser, and navigate to Manage Jenkins > Script Console (or simply go to http://<jenkins url>:8080/script)
+- copy the below "script" into the script field, and click Run:
+```
+Jenkins.instance.pluginManager.plugins.each{
+  plugin -> 
+    println ("${plugin.getDisplayName()} (${plugin.getShortName()}): ${plugin.getVersion()}")
+}
+```
+- this will dump out the installed plugins and their versions.
   
 ## Reference docs
-- installing docker reference: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-22-04
-- installing docker-compose reference: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-22-04
+- https://www.cloudbees.com/blog/how-to-install-and-run-jenkins-with-docker-compose
+
+## Additional information
+- installing docker for ubuntu22: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-22-04
+- installing docker-compose: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-22-04
+    - when installing docker compose, please make sure to use the above instructions, but download version 2.17.2 instead when running the commands in the instructions
 
 ## License
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
